@@ -52,46 +52,12 @@ async fn listen(port: u16) -> Result<()> {
     let listener: TcpListener = TcpListener::bind(socket_addr).await.unwrap();
     loop {
         let (socket, _) = listener.accept().await.unwrap();
-        // A new task is spawned for each inbound socket. The socket is
-        // moved to the new task and processed there.
+        // A new task is spawned for each inbound socket.
+        // The socket is moved to the new task and processed there.
         tokio::spawn(async move {
             handle_socket(socket).await?;
             Ok::<(), anyhow::Error>(())
         });
-        // let (socket,_) = listener.accept().await?;
-        // tokio::spawn(async move {
-        //     handle_socket(socket).await;
-        //     Ok::<(), anyhow::Error>(())
-        // });
-        //
-
-        // let (socket, addr) = listener.accept().await?;
-        // tokio::spawn(async move {
-        //     match handle_socket(socket).await {
-        //         Ok(_) => log::info!("Connection from {} handled successfully", addr),
-        //         Err(e) => log::warn!("Error handling connection from {}: {}", addr, e),
-        //     }
-        // });
-
-        // match listener.accept().await {
-        //     Ok((socket, addr)) => {
-        //         tokio::spawn(async move {
-        //             if let Err(e) = handle_socket(socket).await {
-        //                 log::warn!("Error handling connection from {}: {}", addr, e);
-        //             }
-        //         }).await.unwrap();
-        //     }
-        //     Err(e) => {
-        //         log::warn!("Error accepting connection: {}", e);
-        //     }
-        // }
-
-        // let (socket, addr) = listener.accept().await?;
-        // tokio::spawn( async move {
-        //     if let Err(e) = handle_socket(socket).await {
-        //         log::warn!("Error handling connection from {}: {}", addr, e);
-        //     }
-        // });
     }
 }
 
