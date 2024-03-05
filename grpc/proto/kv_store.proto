@@ -1,11 +1,16 @@
+// Version of protocol buffers
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
+// Let the proto compiler export the protocol buffers to a `kv_store` package
 package kv_store;
 
 service KvStore {
   rpc Example (ExampleRequest) returns (ExampleReply) {}
-
-  // TODO: Protocol buffers
+  rpc Echo (EchoRequest) returns (EchoReply) {}
+  rpc Get (GetRequest) returns (GetReply) {}
+  rpc Put (PutRequest) returns (google.protobuf.Empty) {}
 }
 
 message ExampleRequest {
@@ -16,4 +21,25 @@ message ExampleReply {
   uint32 output = 1;
 }
 
-// TODO: Protocol buffers
+message EchoRequest {
+  string input = 1;
+}
+
+message EchoReply {
+  string output = 1;
+}
+
+// Get should take in a key of type bytes
+message GetRequest {
+  bytes key = 1;
+}
+
+message GetReply {
+  bytes value = 1;
+}
+
+// Put should take in a key and value (both of type bytes)
+message PutRequest {
+  bytes key = 1;
+  bytes value = 2;
+}
